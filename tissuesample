@@ -1,0 +1,45 @@
+import numpy as np
+import pygame as pg
+import random
+
+# Get dimensions from user
+rows = int(input("Enter number of rows: "))
+cols = int(input("Enter number of columns: "))
+
+# Create the tissue sample with 0 (healthy) and 1 (damaged)
+tissue_sample = np.random.choice([0, 1], size=(rows, cols), p=[0.8, 0.2])  # 80% healthy, 20% damaged
+
+# Initialize Pygame
+pg.init()
+screen = pg.display.set_mode((800, 600))
+pg.display.set_caption("Tissue Sample Visualization")
+
+# Define colors
+green = (0, 255, 0)   # Healthy
+red = (255, 0, 0)     # Damaged
+
+# Grid dimensions
+cell_width = 710 // cols
+cell_height = 510 // rows
+
+running = True
+while running:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
+
+    # Draw each cell
+    for i in range(rows):
+        for j in range(cols):
+            value = tissue_sample[i][j]
+            color = green if value == 0 else red
+            pg.draw.rect(screen, color, pg.Rect(
+                50 + cell_width * j,
+                50 + cell_height * i,
+                cell_width - 2,
+                cell_height - 2
+            ))
+
+    pg.display.update()
+
+pg.quit()
